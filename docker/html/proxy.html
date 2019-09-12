@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<title>代理页面</title>
+		<script type="text/javascript" src="http://172.18.15.100:7777/web-apps/apps/api/documents/api.js"></script>
+	</head>
+	<body>
+		<div id="placeholder"></div>
+	</body>
+	<script>
+		window.onload = function(){	
+			var options = window.location.href.split("options=")[1].split("&proxuUrl")[0];
+			var iframeHref = window.location.href.split("proxuUrl=")[1];
+			var iframe;
+			if(!document.getElementById("proxyIframe")){
+				iframe = document.createElement("iframe");
+				iframe.setAttribute("style","position:absolute;z-index:-99;");
+				iframe.setAttribute("id","proxy");
+				iframe.setAttribute("src",iframeHref);	
+				
+				// 加载之后
+				iframe.onload = iframeload;   	
+					
+				document.body.appendChild(iframe);
+			}else{
+				document.getElementById("proxy").src = iframeHref;
+			}
+			
+			function iframeload(){
+				 console.log(iframe)
+				
+				 setTimeout(function(){
+					var wrap = document.getElementsByTagName("iframe")[0].contentWindow.document;
+					
+					console.log(document.getElementsByTagName("iframe")[0].contentWindow.document.getElementById("toolbar"));					
+					console.log(wrap.getElementById("fm-btn-print"));
+					
+					if(options === 'save'){				
+						var save = wrap.getElementById("id-toolbar-full-placeholder-btn-save").getElementsByTagName("button")[0];;
+						console.log(wrap.getElementById("id-toolbar-full-placeholder-btn-save"))
+						if(save){
+							save.click();	
+						}									
+					}
+					if(options === 'print'){
+						var print = wrap.getElementById("fm-btn-print");
+						console.log(print)
+						if(print){
+							print.click();	
+						}						
+					}
+					if(options === 'insert'){
+						var insert = wrap.getElementById("id-toolbar-btn-insertimage").getElementsByTagName("button")[0];
+						console.log(wrap.getElementById("id-toolbar-btn-insertimage"))
+						if(insert){
+							insert.click();	
+						}									
+					}
+				 },20000)					
+								
+			}
+		}	
+	</script>
+</html>
